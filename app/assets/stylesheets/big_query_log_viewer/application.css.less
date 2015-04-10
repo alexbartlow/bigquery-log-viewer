@@ -1,0 +1,146 @@
+/*
+ *= require font-awesome
+ */
+
+body {
+  font-size: 13px;
+  font-family: Helvetica, Arial, sans-serif;
+  
+  background-color: #333;
+  color: #ddd;
+  padding: 0px;
+  margin: 0px;
+}
+
+a {
+  color: #ccc;
+}
+
+#authenticate-btn, #application {
+  display: none;
+}
+
+.fixed-top {
+  position: fixed;
+  background-color: #333;
+  width: 100%;
+  padding: 10px;
+  border-bottom: solid white 1px;
+}
+
+.tabs {
+  padding: 10px;
+  padding-top: 120px;
+}
+
+.query-status {
+  margin: 5px;
+  margin-top: 10px;
+  .error {
+    color: #C55050;
+  }
+}
+
+.row-viewer {
+  border-collapse: collapse;
+
+  &.hidden {
+    display: none;
+  }
+
+  td {
+    padding: 2px 4px;
+    vertical-align: top;
+  }
+
+  .column-controls {
+    i {
+      opacity: 0;
+    }
+  }
+  tr:hover {
+    .column-controls {
+      i {
+        opacity: 1;
+      }
+      cursor: pointer;
+    }
+  }
+  .column-ts {
+    white-space: nowrap;
+    .ts-milliseconds {
+      color: #777;
+    }
+  }
+  .column-host {
+    color: white;
+  }
+  .column-pid, .column-rid {
+    color: rgb(163, 158, 56);
+  }
+  .column-severity {
+    &[data-severity=DEBUG] {
+      color: #999;
+    }
+    &[data-severity=INFO] {
+      color: rgb(135, 135, 176);
+    }
+    &[data-severity=WARN] {
+      color: yellow;
+    }
+    &[data-severity=ERROR] {
+      color: orange;
+    }
+    &[data-severity=FATAL] {
+      color: red;
+    }
+  }
+  .column-msg {
+    pre {
+      white-space: normal;
+      word-break: break-all;
+      margin: 0;
+      line-height: 16px;
+    }
+  }
+
+  .proximity-row {
+    display: none;
+    td {
+      background-color: #454545;
+    }
+  }
+  
+  .collapsed-string {
+    display: none;
+  }
+  .expand-row {
+    padding-left: 10px;
+    color: #aaa;
+  }
+
+  .highlight-row {
+    background-color: red;
+  }
+}
+
+.tabBar {
+  display: inline-block;
+  border: solid white 1px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+
+  div {
+    float: left;
+    padding: 3px;
+  }
+
+  .tab-active div:not(.tab-divider) {
+    background-color: white;
+    color: black;
+  }
+
+  div:hover {
+    cursor: pointer;
+  }
+}

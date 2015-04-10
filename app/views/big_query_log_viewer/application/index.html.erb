@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Log viewer</title>
+
+  <%= stylesheet_link_tag 'big_query_log_viewer/application' %>
+  <%= javascript_include_tag 'big_query_log_viewer/application' %>
+
+  <script type="text/javascript">
+    function init() { 
+      var projectNumber = '<%= BigQueryLogViewer.project_number %>'
+      var clientId = '<%= BigQueryLogViewer.client_id %>'
+      var tablePrefix = '<%= BigQueryLogViewer.table_prefix %>'
+      var rowsPerPage = parseInt('<%= BigQueryLogViewer.rows_per_page %>')
+      var nearbyRows = parseInt('<%= BigQueryLogViewer.nearby_rows %>')
+      BigQueryLogViewer.apiManager = new BigQueryLogViewer.ApiManager(projectNumber, clientId, tablePrefix, rowsPerPage, nearbyRows)
+    }
+  </script>
+
+  <%= javascript_include_tag "https://apis.google.com/js/client.js?onload=init" %>
+</head>
+
+<body>
+  <button id="authenticate-btn" class="btn btn-default">Authenticate</button>
+  <div id="application"></div>
+</body>
+</html>
