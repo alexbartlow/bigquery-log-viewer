@@ -156,7 +156,7 @@ class BigQueryLogViewer.ApiManager
 
     maxResults = @nearbyRows * 2 + 1
 
-    @executeQuery(query, {maxResults: @nearbyRows}, (response) =>
+    @executeQuery(query, {maxResults: maxResults}, (response) =>
       # Create new tab for the expansion.
       rows = (new RowResource(r.f[0].v, r.f[4].v, r.f[3].v, r.f[1].v, r.f[2].v, r.f[5].v) for r in response.rows)
       page =
