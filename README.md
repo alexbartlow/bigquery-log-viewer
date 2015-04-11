@@ -20,7 +20,7 @@ Finally, mount the engine by adding the following to your application's `routes.
 
 ## Contributing
 
-1. Fork it ( https://github.com/aha_app/bigquery-log-viewer/fork )
+1. Fork it ( https://github.com/aha-app/bigquery-log-viewer/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
