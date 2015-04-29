@@ -27,7 +27,7 @@ BigQueryLogViewer.Row = React.createClass
 
     if @props.tab.resultsTab()
       `<tr>
-        <td className="column-controls" onClick={this.handleShowProximity}><i className="fa fa-expand"></i></td>
+        <td className="column-controls" onClick={this.handleShowProximity}><i className="icon icon-external-link"></i></td>
         <td className="column-ts">{row.tss()}<span className="ts-milliseconds">.{row.tsm()}</span></td>
         <td className="column-host">{row.host}</td>
         <td className="column-pid">{row.pid}</td>
