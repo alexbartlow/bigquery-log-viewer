@@ -82,40 +82,43 @@ BigQueryLogViewer.TabManager = React.createClass
 
         tabDivider =
           if tabNames.length > 0
-            `<div className={"tab-divider"}>|</div>`
+            <div className={"tab-divider"}>|</div>
 
-        tabNames.push `
+        tabNames.push(
           <div key={"tab-name-" + index} className={tabClass}>
             {tabDivider}
-            <div onClick={this.handleTabSwitch}>
+            <div onClick={@handleTabSwitch}>
               {tab.title()}
             </div>
             <div>
-              <a onClick={this.handleDeleteTab}>X</a>
+              <a onClick={@handleDeleteTab}>X</a>
             </div>
-          </div>`
+          </div>
+        )
 
       tabDiv =
         if tabNames.length > 0
-          `<div className="tabBar">
+          <div className="tabBar">
             {tabNames}
-          </div>`
+          </div>
 
       # Create tab to be displayed.
       activeTab =
         if (tab = @state.tabManager.activeTab())
           if tab.resultsTab()
-              `<ResultsTab key={"tab-" + index} tab={tab} showProximity={showProximity} showNextPage={showNextPage} showPrevPage={showPrevPage} showPage={showPage} />`
+              <ResultsTab key={"tab-" + index} tab={tab} showProximity={showProximity} showNextPage={showNextPage} showPrevPage={showPrevPage} showPage={showPage} />
             else
-              `<ExpansionTab key={"tab-" + index} tab={tab} setShowBefore={showBefore} setShowAfter={showAfter} />`
+              <ExpansionTab key={"tab-" + index} tab={tab} setShowBefore={showBefore} setShowAfter={showAfter} />
 
-    `<div>
-      <div className={"fixed-top"}>
-        <SearchBox handleSubmit={handleSubmit} />
-        <SearchStatus queryInProgress={this.state.queryInProgress} numReturnedResults={this.state.numReturnedResults} errorMessage={this.state.errorMessage} />
-        {tabDiv}
+    return (
+      <div>
+        <div className={"fixed-top"}>
+          <SearchBox handleSubmit={handleSubmit} />
+          <SearchStatus queryInProgress={@state.queryInProgress} numReturnedResults={@state.numReturnedResults} errorMessage={@state.errorMessage} />
+          {tabDiv}
+        </div>
+        <div className={"tabs"}>
+          {activeTab}
+        </div>
       </div>
-      <div className={"tabs"}>
-        {activeTab}
-      </div>
-    </div>`
+    )

@@ -36,38 +36,40 @@ window.BigQueryLogViewer.ExpansionTab = React.createClass
     for row in tab.activePageData()
       highlighted = tab.isHighlighted(row.rid)
       if row.rid < firstRow
-        beforeRows.push `<Row key={row.key()} tab={tab} row={row} />`
+        beforeRows.push <Row key={row.key()} tab={tab} row={row} />
       else if row.rid > lastRow
-        afterRows.push `<Row key={row.key()} tab={tab} row={row} />`
+        afterRows.push <Row key={row.key()} tab={tab} row={row} />
       else
-        rows.push `<Row key={row.key()} tab={tab} row={row} />`
+        rows.push <Row key={row.key()} tab={tab} row={row} />
 
     beforeBlock =
       if tab.showBefore
-        `<table className="row-viewer">
+        <table className="row-viewer">
           <tbody>
             {beforeRows}
           </tbody>
-        </table>`
+        </table>
       else if expandBefore
-        `<a href="#" onClick={this.showBefore}>More</a>`
+        <a href="#" onClick={@showBefore}>More</a>
     
     afterBlock =
       if tab.showAfter
-        `<table className="row-viewer">
+        <table className="row-viewer">
           <tbody>
             {afterRows}
           </tbody>
-        </table>`
+        </table>
       else if expandAfter
-        `<a href="#" onClick={this.showAfter}>More</a>`
+        <a href="#" onClick={@showAfter}>More</a>
 
-    `<div>
-      {beforeBlock}
-      <table className="row-viewer">
-        <tbody>
-          {rows}
-        </tbody>
-      </table>
-      {afterBlock}
-    </div>`
+    return (
+      <div>
+        {beforeBlock}
+        <table className="row-viewer">
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+        {afterBlock}
+      </div>
+    )

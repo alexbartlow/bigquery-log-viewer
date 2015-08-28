@@ -22,18 +22,19 @@ BigQueryLogViewer.ResultsTab = React.createClass
 
     rows = []
     for row in tab.activePageData()
-      rows.push `<Row key={row.key()} tab={tab} row={row} showProximity={showProximity} />`
+      rows.push <Row key={row.key()} tab={tab} row={row} showProximity={showProximity} />
 
     # Generate paginatoin.
     pagination = []
 
     if tab.hasPrevPage()
-      pagination.push `
+      pagination.push(
         <div key={"pagination-link-prev"}>
-          <div onClick={this.showPrevPage}>
+          <div onClick={@showPrevPage}>
             Prev
           </div>
-        </div>`
+        </div>
+      )
 
     for page in [0..tab.numPages() - 1]
       tabClass =
@@ -41,36 +42,40 @@ BigQueryLogViewer.ResultsTab = React.createClass
           "tab-active"
 
       tabDivider =
-          if pagination.length > 0
-            `<div className={"tab-divider"}>|</div>`
+        if pagination.length > 0
+          <div className={"tab-divider"}>|</div>
 
-      pagination.push `
+      pagination.push(
         <div key={"pagination-link-" + page} className={tabClass}>
           {tabDivider}
-          <div onClick={this.showPage}>
+          <div onClick={@showPage}>
             {page + 1}
           </div>
-        </div>`
+        </div>
+      )
 
     if tab.hasNextPage()
       tabDivider =
-          if pagination.length > 0
-            `<div className={"tab-divider"}>|</div>`
-      pagination.push `
+        if pagination.length > 0
+          <div className={"tab-divider"}>|</div>
+      pagination.push(
         <div key={"pagination-link-next"}>
           {tabDivider}
-          <div onClick={this.showNextPage}>
+          <div onClick={@showNextPage}>
             Next
           </div>
-        </div>`
+        </div>
+      )
 
-    `<div>
-      <table className="row-viewer">
-        <tbody>
-          {rows}
-        </tbody>
-      </table>
-      <div className={"tabBar"}>
-        {pagination}
+    return (
+      <div>
+        <table className="row-viewer">
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+        <div className={"tabBar"}>
+          {pagination}
+        </div>
       </div>
-    </div>`
+    )
