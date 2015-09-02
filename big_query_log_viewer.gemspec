@@ -24,4 +24,6 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails"
   s.add_dependency "font-awesome-rails"
   s.add_dependency "sprockets-coffee-react"
+
+  s.add_development_dependency "coffeelint"
 end
