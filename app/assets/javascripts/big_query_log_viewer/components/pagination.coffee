@@ -12,9 +12,9 @@ BigQueryLogViewer.Pagination = React.createClass
 
     tabs =
       for tab in @props.tabs
-        <li key={tab.key} className={'active' if tab.active}>
+        <li key={tab.key} onClick={tab.handler || @props.handleTabSwitch} className={'active' if tab.active}>
           <a href={'#'}>
-            <span onClick={tab.handler || @props.handleTabSwitch} dangerouslySetInnerHTML={__html: tab.title} />
+            <span dangerouslySetInnerHTML={__html: tab.title} />
             {removeNode}
           </a>
         </li>
