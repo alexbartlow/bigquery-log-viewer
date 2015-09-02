@@ -1,0 +1,10 @@
+{
+  "coffeescript_error": {
+    "level": "ignore"
+  },
+  "max_line_length": {
+    "value": 100,
+    "level": "error",
+    "limitComments": true
+  }
+}

@@ -4,32 +4,16 @@ rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 
-require 'rdoc/task'
-
-RDoc::Task.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'BigQueryLogViewer'
-  rdoc.options << '--line-numbers'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
-
-
-
 load 'rails/tasks/statistics.rake'
-
-
 
 Bundler::GemHelper.install_tasks
 
-require 'rake/testtask'
+require 'coffeelint'
 
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = false
+task :coffeelint do
+  Coffeelint.lint_dir(File.join('app', 'assets', 'javascripts', 'big_query_log_viewer')) do |filename, lint_report|
+      Coffeelint.display_test_results(filename, lint_report)
+  end
 end
 
-
-task default: :test
+task default: :coffeelint
