@@ -12,7 +12,7 @@
       var projectNumber = '<%= BigQueryLogViewer.project_number %>'
       var clientId = '<%= BigQueryLogViewer.client_id %>'
       var tablePrefix = '<%= BigQueryLogViewer.table_prefix %>'
-      var rowsPerPage = parseInt('<%= BigQueryLogViewer.rows_per_page %>')
+      var rowsPerPage = 5;// parseInt('<%= BigQueryLogViewer.rows_per_page %>')
       BigQueryLogViewer.apiManager = new BigQueryLogViewer.ApiManager(projectNumber, clientId, tablePrefix, rowsPerPage)
     }
   </script>

@@ -10,6 +10,12 @@ class BigQueryLogViewer.Query
 
     "(SELECT * FROM TABLE_DATE_RANGE(logs.#{@tablePrefix}_, #{startDate}, #{endDate}))"
 
+  buildQuery: (startDate, endDate, conds, order) ->
+    q = "SELECT ts, rid, sev, pid, host, msg FROM #{@tableRange(startDate, endDate)}"
+    q = "#{q} WHERE #{conds.join(' AND ')}" if conds.length > 0
+    q = "#{q} ORDER BY #{order}" if order
+    q
+
   executeQuery: (query, config, success, error) ->
     console.log("Executing query: #{query}")
     config.maxResults ?= @rowsPerPage

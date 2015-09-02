@@ -51,13 +51,9 @@ BigQueryLogViewer.TabManager = React.createClass
       return
 
     @setState(queryInProgress: true)
-      
-    query = "
-      SELECT ts, rid, sev, pid, host, msg
-      FROM #{@query.tableRange(startDate, endDate)} 
-      where msg contains '#{searchTerm}'
-      order by ts desc
-      "
+    
+    # Construct query.
+    query = @query.buildQuery(startDate, endDate, ["msg contains '#{searchTerm}'"], 'ts desc')
 
     @query.executeQuery(query, {}, (response) =>
       # Create new tab for the results.
@@ -106,14 +102,13 @@ BigQueryLogViewer.TabManager = React.createClass
 
     @setState(queryInProgress: true)
 
-    query = "
-      SELECT ts, rid, sev, pid, host, msg
-      FROM #{@query.tableRange(@activeTab().startDate, @activeTab().endDate)} 
-      where host = '#{row.host}' 
-      and pid = #{row.pid} 
-      and rid between #{row.rid - 50} and #{row.rid + 50}
-      order by ts, rid desc
-      "
+    # Construct query.
+    conds = [
+      "host = '#{row.host}'"
+      "pid = #{row.pid}"
+      "rid between #{row.rid - @props.rowsPerPage / 2} and #{row.rid + @props.rowsPerPage / 2}"
+    ]
+    query = @query.buildQuery(@activeTab().startDate, @activeTab().endDate, conds, 'ts, rid desc')
 
     @query.executeQuery(query, {maxResults: 101}, (response) =>
       # Create new tab for the expansion.
@@ -130,8 +125,7 @@ BigQueryLogViewer.TabManager = React.createClass
       tab =
         type: 'expansion'
         rowData: rows
-        rid: row.rid
-        msg: row.msg
+        row: row
         source: @activeTab()
       position = if @state.activeTabIndex != null then @state.activeTabIndex + 1 else 0
       @state.tabs.splice(position, 0, tab)
@@ -186,7 +180,7 @@ BigQueryLogViewer.TabManager = React.createClass
           else
             "Search results: #{tab.term} (#{tab.startDate} to #{tab.endDate})"
         else
-          "#{tab.msg.substr(0, 30)}..."
+          "#{tab.row.msg.substr(0, 30)}..."
 
       tabNames.push(
         <div key={"tab-name-#{index}"} className={tabClass}>
@@ -201,7 +195,7 @@ BigQueryLogViewer.TabManager = React.createClass
       )
 
       tabs.push(
-        <Tab key={"tab-#{index}"} tab={tab} query={@query} visible={index == @state.activeTabIndex} handleShowProximity={@handleShowProximity} />
+        <Tab key={"tab-#{index}"} tab={tab} query={@query} visible={index == @state.activeTabIndex} handleShowProximity={@handleShowProximity} rowsPerPage={@props.rowsPerPage} />
       )
           
     tabDiv =
