@@ -27,10 +27,6 @@ BigQueryLogViewer.Row = React.createClass
       else
         row.msg
 
-    highlightClass =
-      if @props.highlighted
-        'highlight-row'
-
     if @props.type == 'results'
       return (
         <tr>
@@ -44,7 +40,7 @@ BigQueryLogViewer.Row = React.createClass
       )
     else
       return (
-        <tr className={highlightClass}>
+        <tr className={'highlight-row' if @props.highlighted}>
           <td className='column-ts'>{@state.tss}<span className='ts-milliseconds'>.{@state.tsm}</span></td>
           <td className='column-rid'>{@state.rid}</td>
           <td className='column-severity' data-severity={row.severity}>{row.severity}</td>
