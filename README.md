@@ -2,11 +2,25 @@
 
 A Rails engine to mount a user interface to search for logs stored in Google BigQuery.
 
+![BigQuery Log Viewer](https://cloud.githubusercontent.com/assets/1896112/9646564/7877bcda-519a-11e5-8bfb-bc34dc93de9e.png)
+
 ## Installation
 
-Add the gem to your Gemfile and bundle:
+Add this line to your application's Gemfile:
 
-`gem 'big_query_log_viewer', github: 'aha-app/bigquery-log-viewer'`
+```ruby
+gem 'big_query_log_viewer'
+```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install big_query_log_viewer
+
+## Usage
 
 Run the generator to create your initialization file:
 
