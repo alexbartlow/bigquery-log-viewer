@@ -13,6 +13,3 @@ BigQueryLogViewer.table_prefix = ''
 
 # The number of rows to display on each results page.
 BigQueryLogViewer.rows_per_page = 100
-
-# The number of nearby rows to show in each direction when a row is expanded.
-BigQueryLogViewer.nearby_rows = 500

@@ -62,49 +62,17 @@ BigQueryLogViewer.Tab = React.createClass
     tab = @props.tab
 
     rows = []
-    if @props.tab.type == 'results'
-      # Show all rows - this is a results tab.
-      for row in @state.pages[@state.activePageIndex]
-        rows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} handleShowProximity={@props.handleShowProximity} />
-    else
-      # Show a subsection of rows - this is an expansion tab.
-      # Determine which rows to show.
-      firstRow = Math.max(@props.tab.rid - 50, @state.pages[0][0].rid)
-      expandBefore = (@state.pages[0][0].rid < @props.tab.rid - 50)
-      lastRow = Math.min(@props.tab.rid + 50, @state.pages[0][@state.pages[0].length - 1].rid)
-      expandAfter = (@state.pages[0][@state.pages[0].length - 1].rid > @props.tab.rid + 50)
+    # Show all rows - this is a results tab.
+    for row in @state.pages[@state.activePageIndex]
+      rows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} highlighted={@props.tab.rid == row.rid} handleShowProximity={@props.handleShowProximity} />
 
-      beforeRows = []
-      rows = []
-      afterRows = []
+    beforeLink =
+      if @props.tab.type == 'expansion'
+        <a href='#' onClick={@handleShowBefore}>More</a>
 
-      for row in @state.pages[0]
-        if row.rid < firstRow
-          beforeRows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} />
-        else if row.rid > lastRow
-          afterRows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} />
-        else
-          rows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} highlighted={@props.tab.rid == row.rid} />
-
-      beforeBlock =
-        if @state.showBefore
-          <table className='row-viewer'>
-            <tbody>
-              {beforeRows}
-            </tbody>
-          </table>
-        else if expandBefore
-          <a href='#' onClick={@handleShowBefore}>More</a>
-    
-      afterBlock =
-        if @state.showAfter
-          <table className='row-viewer'>
-            <tbody>
-              {afterRows}
-            </tbody>
-          </table>
-        else if expandAfter
-          <a href='#' onClick={@handleShowAfter}>More</a>
+    afterLink =
+      if @props.tab.type == 'expansion'
+        <a href='#' onClick={@handleShowAfter}>More</a>
 
     # Generate pagination if a results tab.
     if @props.tab.type == 'results'
@@ -155,7 +123,7 @@ BigQueryLogViewer.Tab = React.createClass
 
     return (
       <div className={hiddenClass}>
-        {beforeBlock}
+        {beforeLink}
         <table className={'row-viewer'}>
           <tbody>
             {rows}
@@ -164,6 +132,6 @@ BigQueryLogViewer.Tab = React.createClass
         <div className={'tabBar'}>
           {pagination}
         </div>
-        {afterBlock}
+        {afterLink}
       </div>
     )

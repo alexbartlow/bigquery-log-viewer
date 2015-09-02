@@ -111,13 +111,11 @@ BigQueryLogViewer.TabManager = React.createClass
       FROM #{@query.tableRange(@activeTab().startDate, @activeTab().endDate)} 
       where host = '#{row.host}' 
       and pid = #{row.pid} 
-      and rid between #{row.rid - @props.nearbyRows} and #{row.rid + @props.nearbyRows}
+      and rid between #{row.rid - 50} and #{row.rid + 50}
       order by ts, rid desc
       "
 
-    maxResults = @props.nearbyRows * 2 + 1
-
-    @query.executeQuery(query, {maxResults: maxResults}, (response) =>
+    @query.executeQuery(query, {maxResults: 101}, (response) =>
       # Create new tab for the expansion.
       rows =
         for r in response.rows

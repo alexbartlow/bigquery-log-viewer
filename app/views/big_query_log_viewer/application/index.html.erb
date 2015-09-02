@@ -13,8 +13,7 @@
       var clientId = '<%= BigQueryLogViewer.client_id %>'
       var tablePrefix = '<%= BigQueryLogViewer.table_prefix %>'
       var rowsPerPage = parseInt('<%= BigQueryLogViewer.rows_per_page %>')
-      var nearbyRows = parseInt('<%= BigQueryLogViewer.nearby_rows %>')
-      BigQueryLogViewer.apiManager = new BigQueryLogViewer.ApiManager(projectNumber, clientId, tablePrefix, rowsPerPage, nearbyRows)
+      BigQueryLogViewer.apiManager = new BigQueryLogViewer.ApiManager(projectNumber, clientId, tablePrefix, rowsPerPage)
     }
   </script>
 

@@ -5,7 +5,7 @@ window.BigQueryLogViewer ||= {}
 TabManager = BigQueryLogViewer.TabManager
 
 class BigQueryLogViewer.ApiManager
-  constructor: (@projectId, @clientId, @tablePrefix, @rowsPerPage, @nearbyRows) ->
+  constructor: (@projectId, @clientId, @tablePrefix, @rowsPerPage) ->
     config =
       'client_id': @clientId,
       'scope': 'https://www.googleapis.com/auth/bigquery'
@@ -34,5 +34,4 @@ class BigQueryLogViewer.ApiManager
       projectId: @projectId
       tablePrefix: @tablePrefix
       rowsPerPage: @rowsPerPage
-      nearbyRows: @nearbyRows
     React.render(React.createElement(TabManager, props), $('#application')[0])
