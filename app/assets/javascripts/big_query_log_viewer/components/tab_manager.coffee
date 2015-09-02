@@ -5,12 +5,14 @@
 #= require ./tab
 #= require ./search_box
 #= require ./search_status
+#= require ./pagination
 
 window.BigQueryLogViewer ||= {}
 
 Tab = BigQueryLogViewer.Tab
 SearchBox = BigQueryLogViewer.SearchBox
 SearchStatus = BigQueryLogViewer.SearchStatus
+Pagination = BigQueryLogViewer.Pagination
 
 Query = BigQueryLogViewer.Query
 
@@ -149,6 +151,7 @@ BigQueryLogViewer.TabManager = React.createClass
         rowData: rows
         row: row
         source: @activeTab()
+        term: @activeTab().term
       position = if @state.activeTabIndex != null then @state.activeTabIndex + 1 else 0
       @state.tabs.splice(position, 0, tab)
       @setState(activeTabIndex: position)
@@ -167,7 +170,7 @@ BigQueryLogViewer.TabManager = React.createClass
   handleTabSwitch: (event) ->
     @setState(activeTabIndex: parseInt(event.dispatchMarker.split('tab-name-')[1]))
 
-  handleDeleteTab: (event) ->
+  handleTabDelete: (event) ->
     index = parseInt(event.dispatchMarker.split('tab-name-')[1])
 
     newIndex = 
@@ -183,55 +186,28 @@ BigQueryLogViewer.TabManager = React.createClass
     @setState(activeTabIndex: newIndex)
 
   render: ->
-    # Create tab bar and tabs list.
-    tabNames = []
-    tabs = []
-    for tab, index in @state.tabs
-      tabClass = 
-        if index == @state.activeTabIndex
-          'tab-active'
+    # Create tab list for pagination.
+    pagination =
+      for tab, index in @state.tabs
+        title = tab.term
+        title = "<i class='icon icon-external-link'></i> #{title}" if tab.type == 'expansion'
 
-      tabDivider =
-        if tabNames.length > 0
-          <div className={'tab-divider'}>|</div>
+        {
+          title: title
+          active: index == @state.activeTabIndex
+          key: "tab-name-#{index}"
+        }
 
-      title =
-        if tab.type == 'results'
-          if tab.startDate == null && tab.endDate == null
-            "Search results: #{tab.term}"
-          else
-            "Search results: #{tab.term} (#{tab.startDate} to #{tab.endDate})"
-        else
-          "#{tab.row.msg.substr(0, 30)}..."
-
-      tabNames.push(
-        <div key={"tab-name-#{index}"} className={tabClass}>
-          {tabDivider}
-          <div onClick={@handleTabSwitch}>
-            {title}
-          </div>
-          <div>
-            <a onClick={@handleDeleteTab}>X</a>
-          </div>
-        </div>
-      )
-
-      tabs.push(
+    tabs =
+      for tab, index in @state.tabs
         <Tab key={"tab-#{index}"} tab={tab} query={@query} visible={index == @state.activeTabIndex} handleShowProximity={@handleShowProximity} rowsPerPage={@props.rowsPerPage} />
-      )
-          
-    tabDiv =
-      if tabNames.length > 0
-        <div className={'tabBar'}>
-          {tabNames}
-        </div>
 
     return (
       <div>
-        <div className={'fixed-top'}>
+        <div>
           <SearchBox handleSearch={@handleSearch} />
           <SearchStatus queryInProgress={@state.queryInProgress} numReturnedResults={@state.numReturnedResults} errorMessage={@state.errorMessage} />
-          {tabDiv}
+          <Pagination type={'top'} tabs={pagination} handleTabSwitch={@handleTabSwitch} handleTabDelete={@handleTabDelete} />
         </div>
         <div className={'tabs'}>
           {tabs}

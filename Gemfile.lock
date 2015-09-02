@@ -6,6 +6,7 @@ PATH
       font-awesome-rails
       jquery-rails
       less-rails
+      less-rails-bootstrap
       rails
       react-rails
       sprockets-coffee-react
@@ -82,13 +83,13 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (1.8.3)
-    less (2.6.0)
-      commonjs (~> 0.2.7)
-    less-rails (2.7.0)
-      actionpack (>= 4.0)
-      less (~> 2.6.0)
-      sprockets (> 2, < 4)
-      tilt
+    less (2.3.3)
+      commonjs (~> 0.2.6)
+    less-rails (2.3.3)
+      actionpack (>= 3.1)
+      less (~> 2.3.1)
+    less-rails-bootstrap (2.3.3)
+      less-rails (~> 2.3.1)
     libv8 (3.16.14.11)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)

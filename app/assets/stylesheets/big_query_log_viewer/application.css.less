@@ -1,15 +1,19 @@
 /*
+ *= require twitter/bootstrap
  *= require font-awesome
  */
 
 body {
   font-size: 13px;
   font-family: Helvetica, Arial, sans-serif;
-  
-  background-color: #333;
-  color: #ddd;
-  padding: 0px;
+  padding: 25px;
+  padding-top: 5px;
   margin: 0px;
+}
+
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 a {
@@ -24,17 +28,49 @@ a {
   display: none;
 }
 
-.fixed-top {
-  position: fixed;
-  background-color: #333;
-  width: 100%;
-  padding: 10px;
-  border-bottom: solid white 1px;
+.controls {
+  input {
+    margin-right: 5px;
+    padding: 3px;
+    border-radius: 3px;
+
+    &[type=date] {
+      width: 150px;
+    }
+  }
+
+  span {
+    vertical-align: middle;
+  }
+}
+
+ul.nav {
+  margin-bottom: 0px;
+
+  li {
+    span.remove-wrapper {
+      display: inline-block;
+      width: 15px;
+
+      i.icon-remove {
+        margin-left: 5px;
+        cursor: pointer;
+        display: none;
+      }
+    }
+
+    &:hover span.remove-wrapper i.icon-remove {
+      display: inline-block;
+    }
+  }
 }
 
 .tabs {
   padding: 10px;
-  padding-top: 120px;
+
+  >div {
+    overflow-y: scroll;
+  }
 }
 
 .query-status {
@@ -73,7 +109,7 @@ a {
     }
   }
   .column-host {
-    color: white;
+    color: #333;
   }
   .column-pid, .column-rid {
     color: rgb(163, 158, 56);
@@ -120,27 +156,6 @@ a {
   }
 
   .highlight-row {
-    background-color: red;
-  }
-}
-
-.tabBar {
-  display: inline-block;
-  border: solid white 1px;
-  margin-top: 3px;
-  margin-bottom: 3px;
-
-  div {
-    float: left;
-    padding: 3px;
-  }
-
-  .tab-active div:not(.tab-divider) {
-    background-color: white;
-    color: black;
-  }
-
-  div:hover {
-    cursor: pointer;
+    background-color: #FFCCCC;
   }
 }

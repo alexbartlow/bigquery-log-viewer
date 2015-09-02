@@ -1,22 +1,17 @@
 ###* @jsx React.DOM ###
 
+#= require ./pagination
 #= require ./row
 
 window.BigQueryLogViewer ||= {}
 
+Pagination = BigQueryLogViewer.Pagination
 Row = BigQueryLogViewer.Row
 
 BigQueryLogViewer.Tab = React.createClass
   getInitialState: ->
-    pageTitles =
-      if @expansionTab()
-        ['Target']
-      else
-        []
-
     {
       pages: [@props.tab.rowData]
-      pageTitles: pageTitles
       activePageIndex: 0
       pageToken: @props.tab.pageToken
       showPrevLink: true
@@ -24,9 +19,6 @@ BigQueryLogViewer.Tab = React.createClass
       currentNextPage: 0
       currentPrevPage: 0
     }
-
-  pageTitle: (index) ->
-    @state.pageTitles[index] || (index + 1)
 
   resultsTab: ->
     @props.tab.type is 'results'
@@ -117,12 +109,8 @@ BigQueryLogViewer.Tab = React.createClass
               msg: r.f[5].v
             }
 
-        @state.pages.push(rows)
-        @state.pageTitles.push(@state.currentNextPage + 1)
-        @setState(
-          currentNextPage: @state.currentNextPage + 1
-          activePageIndex: @state.pages.length - 1
-        )
+        @state.pages[0] = @state.pages[0].concat(rows)
+        @setState(currentNextPage: @state.currentNextPage + 1)
 
       , (reponse) =>
         console.log "ERROR: #{response.message}; entire response follows"
@@ -179,12 +167,8 @@ BigQueryLogViewer.Tab = React.createClass
               msg: r.f[5].v
             }
 
-        @state.pages.unshift(rows)
-        @state.pageTitles.unshift(@state.currentPrevPage + 1)
-        @setState(
-          currentPrevPage: @state.currentPrevPage + 1
-          activePageIndex: 0
-        )
+        @state.pages[0] = rows.concat(@state.pages[0])
+        @setState(currentPrevPage: @state.currentPrevPage + 1)
 
       , (reponse) =>
         console.log "ERROR: #{response.message}; entire response follows"
@@ -195,11 +179,16 @@ BigQueryLogViewer.Tab = React.createClass
   handleShowPage: (event) ->
     @setState(activePageIndex: parseInt(event.dispatchMarker.split('pagination-link-')[1]))
 
-  handleShowBefore: ->
-    @setState(showBefore: true)
+  componentDidMount: ->
+    if @expansionTab()
+      window.requestAnimationFrame =>
+        node = @getDOMNode()
+        node.scrollTop = $(node).find('.highlight-row').offset().top
 
-  handleShowAfter: ->
-    @setState(showAfter: true)
+  componentDidUpdate: ->
+    node = $(@getDOMNode())
+    maxHeight = $(window).height() - node.offset().top - 40
+    node.css('max-height', maxHeight)
 
   render: ->
     showProximity = @props.showProximity
@@ -210,56 +199,77 @@ BigQueryLogViewer.Tab = React.createClass
         <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} highlighted={@highlighted(row)} handleShowProximity={@props.handleShowProximity} />
 
     # Generate pagination.
-    pagination = []
+    if @resultsTab()
+      pagination = []
 
-    if @state.activePageIndex > 0 || (@expansionTab() && @state.showPrevLink)
-      pagination.push(
-        <div key={'pagination-link-prev'}>
-          <div onClick={@handlePrevPage}>
-            {@prevTitle()}
-          </div>
-        </div>
-      )
+      if @state.activePageIndex > 0 || (@expansionTab() && @state.showPrevLink)
+        pagination.push(
+          title: @prevTitle()
+          active: false
+          key: 'pagination-link-prev'
+          handler: @handlePrevPage
+        )
 
-    for page, index in @state.pages
-      tabClass =
-        if index == @state.activePageIndex
-          'tab-active' 
+      for page, index in @state.pages
+        pagination.push(
+          title: (index + 1)
+          active: index == @state.activePageIndex
+          key: "pagination-link-#{index}"
+          handler: @handleShowPage
+        )
 
-      tabDivider =
-        if pagination.length > 0
-          <div className={'tab-divider'}>|</div>
+      if @state.activePageIndex + 1 < @state.pages.length || (@resultsTab() && @state.pageToken) || (@expansionTab() && @state.showNextLink)
+        pagination.push(
+          title: @nextTitle()
+          active: false
+          key: 'pagination-link-next'
+          handler: @handleNextPage
+        )
 
-      pagination.push(
-        <div key={"pagination-link-#{index}"} className={tabClass}>
-          {tabDivider}
-          <div onClick={@handleShowPage}>
-            {@pageTitle(index)}
-          </div>
-        </div>
-      )
+    head =
+      if @resultsTab()
+        <thead>
+          <tr>
+            <th></th>
+            <th>Timestamp</th>
+            <th>Host</th>
+            <th>PID</th>
+            <th>Severity</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+      else
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>RID</th>
+            <th>Severity</th>
+            <th>Message</th>
+          </tr>
+        </thead>
 
-    if @state.activePageIndex + 1 < @state.pages.length || (@resultsTab() && @state.pageToken) || (@expansionTab() && @state.showNextLink)
-      tabDivider = (<div className={'tab-divider'}>|</div>) if pagination.length > 0
-          
-      pagination.push(
-        <div key={'pagination-link-next'}>
-          {tabDivider}
-          <div onClick={@handleNextPage}>
-            {@nextTitle()}
-          </div>
-        </div>
-      )
+    pagination =
+      if @resultsTab()
+        <Pagination type={'inside'} tabs={pagination} handleTabSwitch={@handleTabSwitch} />
+
+    showMoreTop =
+      if @expansionTab() && @state.showPrevLink
+        <a href={'#'} onClick={@handlePrevPage}>More</a>
+
+    showMoreBottom =
+      if @expansionTab() && @state.showNextLink
+        <a href={'#'} onClick={@handleNextPage}>More</a>
 
     return (
       <div className={'hidden' unless @props.visible}>
-        <table className={'row-viewer'}>
+        {showMoreTop}
+        <table className={'table row-viewer'}>
+          {head}
           <tbody>
             {rows}
           </tbody>
         </table>
-        <div className={'tabBar'}>
-          {pagination}
-        </div>
+        {pagination}
+        {showMoreBottom}
       </div>
     )
