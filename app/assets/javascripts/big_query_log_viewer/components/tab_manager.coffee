@@ -53,7 +53,14 @@ BigQueryLogViewer.TabManager = React.createClass
     @setState(queryInProgress: true)
     
     # Construct query.
-    query = @query.buildQuery(startDate, endDate, ["msg contains '#{searchTerm}'"], 'ts desc')
+    conds = [
+      {
+        field: 'msg'
+        method: 'contains'
+        value: searchTerm
+      }
+    ]
+    query = @query.buildQuery(startDate, endDate, conds, 'ts desc')
 
     @query.executeQuery(query, {}, (response) =>
       # Create new tab for the results.
@@ -104,9 +111,24 @@ BigQueryLogViewer.TabManager = React.createClass
 
     # Construct query.
     conds = [
-      "host = '#{row.host}'"
-      "pid = #{row.pid}"
-      "rid between #{row.rid - @props.rowsPerPage / 2} and #{row.rid + @props.rowsPerPage / 2}"
+      {
+        field: 'host'
+        method: 'equals'
+        type: 'string'
+        value: row.host
+      }
+      {
+        field: 'pid'
+        method: 'equals'
+        type: 'int'
+        value: row.pid
+      }
+      {
+        field: 'rid'
+        method: 'between'
+        firstValue: row.rid - @props.rowsPerPage / 2
+        secondValue: row.rid + @props.rowsPerPage / 2
+      }
     ]
     query = @query.buildQuery(@activeTab().startDate, @activeTab().endDate, conds, 'ts, rid desc')
 

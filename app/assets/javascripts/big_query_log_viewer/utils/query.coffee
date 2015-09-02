@@ -11,6 +11,19 @@ class BigQueryLogViewer.Query
     "(SELECT * FROM TABLE_DATE_RANGE(logs.#{@tablePrefix}_, #{startDate}, #{endDate}))"
 
   buildQuery: (startDate, endDate, conds, order) ->
+    # Construct conditions.
+    conds =
+      for cond in conds
+        value = cond.value.replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0') if cond.value
+        switch cond.method
+          when 'contains' then "#{cond.field} contains '#{value}'"
+          when 'equals'
+            if cond.type == 'string'
+              "#{cond.field} = '#{value}'"
+            else
+              "#{cond.field} = #{value}"
+          when 'between' then "#{cond.field} between #{cond.firstValue} and #{cond.secondValue}"
+
     q = "SELECT ts, rid, sev, pid, host, msg FROM #{@tableRange(startDate, endDate)}"
     q = "#{q} WHERE #{conds.join(' AND ')}" if conds.length > 0
     q = "#{q} ORDER BY #{order}" if order

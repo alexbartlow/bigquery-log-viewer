@@ -78,9 +78,24 @@ BigQueryLogViewer.Tab = React.createClass
 
       # Construct query.
       conds = [
-        "host = '#{@props.tab.row.host}'"
-        "pid = #{@props.tab.row.pid}"
-        "rid between #{startRow} and #{endRow}"
+        {
+          field: 'host'
+          method: 'equals'
+          type: 'string'
+          value: @props.tab.row.host
+        }
+        {
+          field: 'pid'
+          method: 'equals'
+          type: 'int'
+          value: @props.tab.row.pid
+        }
+        {
+          field: 'rid'
+          method: 'between'
+          firstValue: startRow
+          secondValue: endRow
+        }
       ]
       query = @props.query.buildQuery(@props.tab.source.startDate, @props.tab.source.endDate, conds, 'ts, rid desc')
 
@@ -125,9 +140,24 @@ BigQueryLogViewer.Tab = React.createClass
 
       # Construct query.
       conds = [
-        "host = '#{@props.tab.row.host}'"
-        "pid = #{@props.tab.row.pid}"
-        "rid between #{startRow} and #{endRow}"
+        {
+          field: 'host'
+          method: 'equals'
+          type: 'string'
+          value: @props.tab.row.host
+        }
+        {
+          field: 'pid'
+          method: 'equals'
+          type: 'int'
+          value: @props.tab.row.pid
+        }
+        {
+          field: 'rid'
+          method: 'between'
+          firstValue: startRow
+          secondValue: endRow
+        }
       ]
       query = @props.query.buildQuery(@props.tab.source.startDate, @props.tab.source.endDate, conds, 'ts, rid desc')
 
