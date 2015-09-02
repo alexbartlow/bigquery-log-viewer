@@ -27,7 +27,9 @@ BigQueryLogViewer.Row = React.createClass
       else
         row.msg
 
-    highlightClass = 'highlight-row' if @props.highlighted
+    highlightClass =
+      if @props.highlighted
+        'highlight-row'
 
     if @props.type == 'results'
       return (

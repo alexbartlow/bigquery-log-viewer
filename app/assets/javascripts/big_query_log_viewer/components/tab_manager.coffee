@@ -29,9 +29,6 @@ BigQueryLogViewer.TabManager = React.createClass
   activeTab: ->
     @state.tabs[@state.activeTabIndex]
 
-  numTabs: ->
-    @state.tabs.length
-
   findResultsTab: (term, startDate, endDate) ->
     (index for tab, index in @state.tabs when tab.type == 'results' && tab.term is term && tab.startDate is startDate && tab.endDate == endDate)[0]
 
@@ -137,6 +134,7 @@ BigQueryLogViewer.TabManager = React.createClass
         rowData: rows
         rid: row.rid
         msg: row.msg
+        source: @activeTab()
       position = if @state.activeTabIndex != null then @state.activeTabIndex + 1 else 0
       @state.tabs.splice(position, 0, tab)
       @setState(activeTabIndex: position)
@@ -158,24 +156,30 @@ BigQueryLogViewer.TabManager = React.createClass
   handleDeleteTab: (event) ->
     index = parseInt(event.dispatchMarker.split('tab-name-')[1])
 
-    newIndex = @state.activeTabIndex
-    if index <= @state.activeTabIndex
-      newIndex = @state.activeTabIndex - 1
-      if newIndex < 0
-        newIndex = if @numTabs() > 0 then 0 else null
+    newIndex = 
+      if index <= @state.activeTabIndex
+        if @state.activeTabIndex > 0
+          @state.activeTabIndex - 1
+        else
+          null
+      else
+        @state.activeTabIndex
 
-    @setState(
-      tabs: @state.tabs.splice(index, 1)
-      activeTabIndex: newIndex
-    )
+    @state.tabs.splice(index, 1)
+    @setState(activeTabIndex: newIndex)
 
   render: ->
-    # Create tab bar.
+    # Create tab bar and tabs list.
     tabNames = []
+    tabs = []
     for tab, index in @state.tabs
-      tabClass = 'tab-active' if index == @state.activeTabIndex
+      tabClass = 
+        if index == @state.activeTabIndex
+          'tab-active'
 
-      tabDivider = (<div className={'tab-divider'}>|</div>) if tabNames.length > 0
+      tabDivider =
+        if tabNames.length > 0
+          <div className={'tab-divider'}>|</div>
 
       title =
         if tab.type == 'results'
@@ -198,9 +202,10 @@ BigQueryLogViewer.TabManager = React.createClass
         </div>
       )
 
-      # Create tab to be displayed.
-      activeTab = (<Tab key={"tab-#{index}"} tab={tab} query={@query} handleShowProximity={@handleShowProximity} />) if index == @state.activeTabIndex
-
+      tabs.push(
+        <Tab key={"tab-#{index}"} tab={tab} query={@query} visible={index == @state.activeTabIndex} handleShowProximity={@handleShowProximity} />
+      )
+          
     tabDiv =
       if tabNames.length > 0
         <div className={'tabBar'}>
@@ -215,7 +220,7 @@ BigQueryLogViewer.TabManager = React.createClass
           {tabDiv}
         </div>
         <div className={'tabs'}>
-          {activeTab}
+          {tabs}
         </div>
       </div>
     )

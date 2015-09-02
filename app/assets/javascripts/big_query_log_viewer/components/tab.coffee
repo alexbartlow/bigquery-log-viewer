@@ -33,7 +33,7 @@ BigQueryLogViewer.Tab = React.createClass
               severity: r.f[2].v
               msg: r.f[5].v
             }
-        @state.pages.append(rows)
+        @state.pages.push(rows)
         @setState(
           pageToken: response.pageToken
           activePageIndex: @state.activePageIndex + 1
@@ -64,15 +64,15 @@ BigQueryLogViewer.Tab = React.createClass
     rows = []
     if @props.tab.type == 'results'
       # Show all rows - this is a results tab.
-      for row in @props.tab.rowData
+      for row in @state.pages[@state.activePageIndex]
         rows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} handleShowProximity={@props.handleShowProximity} />
     else
       # Show a subsection of rows - this is an expansion tab.
       # Determine which rows to show.
-      firstRow = Math.max(@props.rid - 50, @state.pages[0][0].rid)
-      expandBefore = (@state.pages[0][0].rid < @props.rid - 50)
-      lastRow = Math.min(@props.rid + 50, @state.pages[0][@state.pages[0].length - 1].rid)
-      expandAfter = (@state.pages[0][@state.pages[0].length - 1].rid > @props.rid + 50)
+      firstRow = Math.max(@props.tab.rid - 50, @state.pages[0][0].rid)
+      expandBefore = (@state.pages[0][0].rid < @props.tab.rid - 50)
+      lastRow = Math.min(@props.tab.rid + 50, @state.pages[0][@state.pages[0].length - 1].rid)
+      expandAfter = (@state.pages[0][@state.pages[0].length - 1].rid > @props.tab.rid + 50)
 
       beforeRows = []
       rows = []
@@ -84,7 +84,7 @@ BigQueryLogViewer.Tab = React.createClass
         else if row.rid > lastRow
           afterRows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} />
         else
-          rows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} highlighted={@props.rid == row.rid} />
+          rows.push <Row key={"#{row.pid}-#{row.rid}"} row={row} type={@props.tab.type} highlighted={@props.tab.rid == row.rid} />
 
       beforeBlock =
         if @state.showBefore
@@ -120,20 +120,24 @@ BigQueryLogViewer.Tab = React.createClass
         )
 
       for page, index in @state.pages
-        tabClass = 'tab-active' if index == @state.activePageIndex
+        tabClass =
+          if index == @state.activePageIndex
+            'tab-active' 
 
-        tabDivider = (<div className={'tab-divider'}>|</div>) if pagination.length > 0
+        tabDivider =
+          if pagination.length > 0
+            <div className={'tab-divider'}>|</div>
 
         pagination.push(
-          <div key={"pagination-link-#{page}"} className={tabClass}>
+          <div key={"pagination-link-#{index}"} className={tabClass}>
             {tabDivider}
             <div onClick={@handleShowPage}>
-              {page + 1}
+              {index + 1}
             </div>
           </div>
         )
 
-      if @state.activePageIndex + 1 < @state.pages.length
+      if @state.activePageIndex + 1 < @state.pages.length || @state.pageToken
         tabDivider = (<div className={'tab-divider'}>|</div>) if pagination.length > 0
             
         pagination.push(
@@ -145,10 +149,14 @@ BigQueryLogViewer.Tab = React.createClass
           </div>
         )
 
+    hiddenClass =
+      unless @props.visible
+        'hidden'
+
     return (
-      <div>
+      <div className={hiddenClass}>
         {beforeBlock}
-        <table className='row-viewer'>
+        <table className={'row-viewer'}>
           <tbody>
             {rows}
           </tbody>
