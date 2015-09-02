@@ -4,7 +4,7 @@ window.BigQueryLogViewer ||= {}
 
 TabManager = BigQueryLogViewer.TabManager
 
-class BigQueryLogViewer.ApiManager
+class BigQueryLogViewer.App
   constructor: (@projectId, @clientId, @tablePrefix, @rowsPerPage) ->
     config =
       'client_id': @clientId,
