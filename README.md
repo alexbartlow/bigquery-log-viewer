@@ -32,6 +32,14 @@ Finally, mount the engine by adding the following to your application's `routes.
 
 `mount BigQueryLogViewer::Engine, at: '/some_url'`
 
+## Linting
+
+The project uses coffeelint to ensure quality CoffeeScript syntax. It is configured to run as the default rake task.
+
+## Authorship
+
+Written by Zach Schneider for [Aha!, the world's #1 product roadmap software](http://www.aha.io/)
+
 ## Contributing
 
 1. Fork it ( https://github.com/aha-app/bigquery-log-viewer/fork )
