@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/big_query_log_viewer.svg)](http://badge.fury.io/rb/big_query_log_viewer)
+
 # BigQueryLogViewer
 
 A simple Rails engine and React app to search logs stored in Google BigQuery.
