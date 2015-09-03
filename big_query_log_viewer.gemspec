@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Zach Schneider']
   s.email       = ['zach@aha.io']
   s.homepage    = 'https://github.com/aha-app/bigquery-log-viewer'
-  s.summary     = 'A Rails engine and React app to search for logs stored in Google BigQuery.'
-  s.description = 'A Rails engine and React app to search for logs stored in Google BigQuery.'
+  s.summary     = 'A simple Rails engine and React app to search logs stored in Google BigQuery.'
+  s.description = 'A simple Rails engine and React app to search logs stored in Google BigQuery.'
   s.license     = 'MIT'
 
   s.files = Dir['{app,config,lib}/**/*', 'LICENSE.txt', 'Rakefile', 'README.md']
