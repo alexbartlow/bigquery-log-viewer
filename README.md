@@ -1,6 +1,6 @@
 # BigQueryLogViewer
 
-A Rails engine to mount a user interface to search for logs stored in Google BigQuery.
+A Rails engine and React app to search for logs stored in Google BigQuery.
 
 ![BigQuery Log Viewer](https://cloud.githubusercontent.com/assets/1896112/9646564/7877bcda-519a-11e5-8bfb-bc34dc93de9e.png)
 
@@ -24,7 +24,7 @@ Or install it yourself as:
 
 Run the generator to create your initialization file:
 
-`rails generate big_query_log_viewer:install`
+    $ rails generate big_query_log_viewer:install
 
 Open the newly created file, `config/initializers/big_query_log_viewer.rb`, and add your client ID, project number, and table prefix from the [Google Developer Console](https://console.developers.google.com).
 
@@ -34,7 +34,7 @@ Finally, mount the engine by adding the following to your application's `routes.
 
 ## Linting
 
-The project uses coffeelint to ensure quality CoffeeScript syntax. It is configured to run as the default rake task.
+The project uses [coffeelint](http://www.coffeelint.org/) to maintain quality CoffeeScript syntax. It is configured to run as the default rake task.
 
 ## Authorship
 
