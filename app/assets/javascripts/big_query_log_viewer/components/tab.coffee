@@ -202,7 +202,7 @@ BigQueryLogViewer.Tab = React.createClass
     if @resultsTab()
       pagination = []
 
-      if @state.activePageIndex > 0 || (@expansionTab() && @state.showPrevLink)
+      if @state.activePageIndex > 0
         pagination.push(
           title: @prevTitle()
           active: false
@@ -218,7 +218,7 @@ BigQueryLogViewer.Tab = React.createClass
           handler: @handleShowPage
         )
 
-      if @state.activePageIndex + 1 < @state.pages.length || (@resultsTab() && @state.pageToken) || (@expansionTab() && @state.showNextLink)
+      if @state.activePageIndex + 1 < @state.pages.length || @state.pageToken
         pagination.push(
           title: @nextTitle()
           active: false
