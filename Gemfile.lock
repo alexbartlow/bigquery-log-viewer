@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    big_query_log_viewer (0.0.4)
+    big_query_log_viewer (0.0.5)
       coffee-rails
       font-awesome-rails
       jquery-rails
