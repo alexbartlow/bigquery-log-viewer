@@ -1,6 +1,6 @@
 # BigQueryLogViewer
 
-A Rails engine and React app to search for logs stored in Google BigQuery.
+A simple Rails engine and React app to search logs stored in Google BigQuery.
 
 ![BigQuery Log Viewer](https://cloud.githubusercontent.com/assets/1896112/9646564/7877bcda-519a-11e5-8bfb-bc34dc93de9e.png)
 
@@ -38,7 +38,7 @@ The project uses [coffeelint](http://www.coffeelint.org/) to maintain quality Co
 
 ## Authorship
 
-Written by Zach Schneider for [Aha!, the world's #1 product roadmap software](http://www.aha.io/)
+Written by Zach Schneider, based on prototype by Chris Waters, for [Aha!, the world's #1 product roadmap software](http://www.aha.io/)
 
 ## Contributing
 
