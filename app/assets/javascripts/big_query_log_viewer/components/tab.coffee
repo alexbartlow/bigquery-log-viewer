@@ -183,7 +183,7 @@ BigQueryLogViewer.Tab = React.createClass
     if @expansionTab()
       window.requestAnimationFrame =>
         node = @getDOMNode()
-        node.scrollTop = $(node).find('.highlight-row').offset().top
+        node.scrollTop = $(node).find('.highlight-row').offset().top - $(node).offset().top
 
   componentDidUpdate: ->
     node = $(@getDOMNode())
