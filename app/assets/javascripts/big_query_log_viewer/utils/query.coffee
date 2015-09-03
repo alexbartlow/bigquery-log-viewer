@@ -4,7 +4,7 @@ class BigQueryLogViewer.Query
   constructor: (@projectId, @tablePrefix, @rowsPerPage) ->
     #
 
-  tableRange: (startDate="CURRENT_TIMESTAMP()", endDate="CURRENT_TIMESTAMP()") ->
+  tableRange: (startDate='CURRENT_TIMESTAMP()', endDate='CURRENT_TIMESTAMP()') ->
     startDate = "TIMESTAMP('#{startDate} 00:00:00')" unless startDate == "CURRENT_TIMESTAMP()"
     endDate = "TIMESTAMP('#{endDate} 23:59:59')" unless endDate == "CURRENT_TIMESTAMP()"
 
@@ -45,7 +45,7 @@ class BigQueryLogViewer.Query
         success(response) if success?
 
   executeListQuery: (config, success, error) ->
-    console.log("Executing list query")
+    console.log('Executing list query')
     config.maxResults ?= @rowsPerPage
     request = gapi.client.bigquery.jobs.getQueryResults
       projectId: @projectId

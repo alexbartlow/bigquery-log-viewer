@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
   <title>Log viewer</title>
 
   <%= stylesheet_link_tag 'big_query_log_viewer/application' %>
   <%= javascript_include_tag 'big_query_log_viewer/application' %>
 
-  <script type="text/javascript">
+  <script type='text/javascript'>
     function init() { 
       var projectNumber = '<%= BigQueryLogViewer.project_number %>'
       var clientId = '<%= BigQueryLogViewer.client_id %>'
@@ -17,13 +17,13 @@
     }
   </script>
 
-  <%= javascript_include_tag "https://apis.google.com/js/client.js?onload=init" %>
+  <%= javascript_include_tag 'https://apis.google.com/js/client.js?onload=init' %>
 </head>
 
 <body>
-  <div class="wrapper">
-    <button id="authenticate-btn" class="btn btn-default">Authenticate</button>
-    <div id="application"></div>
+  <div class='wrapper'>
+    <button id='authenticate-btn' class='btn btn-default'>Authenticate</button>
+    <div id='application'></div>
   </div>
 </body>
 </html>
