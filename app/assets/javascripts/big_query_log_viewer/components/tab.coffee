@@ -143,8 +143,8 @@ BigQueryLogViewer.Tab = React.createClass
         {
           field: 'rid'
           method: 'between'
-          firstValue: startRow
-          secondValue: endRow
+          firstValue: endRow
+          secondValue: startRow
         }
       ]
       query = @props.query.buildQuery(@props.tab.source.startDate, @props.tab.source.endDate, conds, 'ts, rid desc')
