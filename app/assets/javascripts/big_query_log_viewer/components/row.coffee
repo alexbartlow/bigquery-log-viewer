@@ -6,7 +6,7 @@ BigQueryLogViewer.Row = React.createClass
   getInitialState: ->
     s = "000#{@props.row.timestamp.getMilliseconds()}"
     y = @props.row.timestamp.getFullYear()
-    mo = ('0' + @props.row.timestamp.getMonth()).slice(-2)
+    mo = ('0' + (@props.row.timestamp.getMonth() + 1)).slice(-2)
     d = ('0' + @props.row.timestamp.getDate()).slice(-2)
     h = ('0' + @props.row.timestamp.getHours()).slice(-2)
     mi = ('0' + @props.row.timestamp.getMinutes()).slice(-2)
