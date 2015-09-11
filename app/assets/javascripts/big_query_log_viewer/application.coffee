@@ -3,6 +3,9 @@
 
 #= require ./components/tab_manager
 
+window.randomId = ->
+  Math.floor(Date.now() / 1000).toString(16) + Math.random().toString(16).slice(2,10)
+
 window.BigQueryLogViewer ||= {}
 
 TabManager = BigQueryLogViewer.TabManager

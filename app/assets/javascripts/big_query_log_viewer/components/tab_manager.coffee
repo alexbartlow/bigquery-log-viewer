@@ -79,6 +79,7 @@ BigQueryLogViewer.TabManager = React.createClass
             }
 
         tab =
+          id: randomId()
           type: 'results'
           rowData: rows
           pageToken: response.pageToken
@@ -147,6 +148,7 @@ BigQueryLogViewer.TabManager = React.createClass
             msg: r.f[5].v
           }
       tab =
+        id: randomId()
         type: 'expansion'
         rowData: rows
         row: row
@@ -154,10 +156,10 @@ BigQueryLogViewer.TabManager = React.createClass
         term: @activeTab().term
       position = if @state.activeTabIndex != null then @state.activeTabIndex + 1 else 0
       @state.tabs.splice(position, 0, tab)
-      @setState(activeTabIndex: position)
 
       # Update the view component.
       @setState
+        activeTabIndex: position
         queryInProgress: false
         numReturnedResults: response.totalRows
         errorMessage: null
@@ -200,7 +202,7 @@ BigQueryLogViewer.TabManager = React.createClass
 
     tabs =
       for tab, index in @state.tabs
-        <Tab key={"tab-#{index}"} tab={tab} query={@query} visible={index == @state.activeTabIndex} handleShowProximity={@handleShowProximity} rowsPerPage={@props.rowsPerPage} />
+        <Tab key={"tab-#{tab.id}"} tab={tab} query={@query} visible={index == @state.activeTabIndex} handleShowProximity={@handleShowProximity} rowsPerPage={@props.rowsPerPage} />
 
     return (
       <div>
