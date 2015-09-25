@@ -1,7 +1,7 @@
 window.BigQueryLogViewer ||= {}
 
 class BigQueryLogViewer.Query
-  constructor: (@projectId, @tablePrefix, @rowsPerPage) ->
+  constructor: (@projectId, @tablePrefix) ->
     #
 
   tableRange: (startDate='CURRENT_TIMESTAMP()', endDate='CURRENT_TIMESTAMP()') ->
@@ -31,7 +31,7 @@ class BigQueryLogViewer.Query
 
   executeQuery: (query, config, success, error) ->
     console.log("Executing query: #{query}")
-    config.maxResults ?= @rowsPerPage
+    config.maxResults ||= 1000
     request = gapi.client.bigquery.jobs.query
       projectId: @projectId
       timeoutMs: 30000
@@ -46,7 +46,7 @@ class BigQueryLogViewer.Query
 
   executeListQuery: (config, success, error) ->
     console.log('Executing list query')
-    config.maxResults ?= @rowsPerPage
+    config.maxResults ||= 1000
     request = gapi.client.bigquery.jobs.getQueryResults
       projectId: @projectId
       jobId: config.jobId

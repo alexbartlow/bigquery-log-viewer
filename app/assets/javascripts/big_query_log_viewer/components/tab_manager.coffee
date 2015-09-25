@@ -18,7 +18,7 @@ Query = BigQueryLogViewer.Query
 
 BigQueryLogViewer.TabManager = React.createClass
   getInitialState: ->
-    @query = new BigQueryLogViewer.Query(@props.projectId, @props.tablePrefix, @props.rowsPerPage)
+    @query = new BigQueryLogViewer.Query(@props.projectId, @props.tablePrefix)
 
     {
       tabs: []
@@ -135,7 +135,7 @@ BigQueryLogViewer.TabManager = React.createClass
     ]
     query = @query.buildQuery(@activeTab().startDate, @activeTab().endDate, conds, 'ts, rid desc')
 
-    @query.executeQuery(query, {maxResults: 101}, (response) =>
+    @query.executeQuery(query, {maxResults: @props.rowsPerPage * 2 + 1}, (response) =>
       # Create new tab for the expansion.
       rows =
         for r in response.rows
