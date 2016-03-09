@@ -7,7 +7,7 @@ BigQueryLogViewer.Pagination = React.createClass
     removeNode =
       if @props.type == 'top'
         <span className={'remove-wrapper'} onClick={@props.handleTabDelete}>
-          <i className={'icon icon-remove'}></i>
+          <i className={'icon fa fa-times'}></i>
         </span>
 
     tabs =

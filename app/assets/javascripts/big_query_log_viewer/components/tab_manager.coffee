@@ -192,7 +192,7 @@ BigQueryLogViewer.TabManager = React.createClass
     pagination =
       for tab, index in @state.tabs
         title = tab.term
-        title = "<i class='icon icon-external-link'></i> #{title}" if tab.type == 'expansion'
+        title = "<i class='icon fa fa-external-link'></i> #{title}" if tab.type == 'expansion'
 
         {
           title: title
