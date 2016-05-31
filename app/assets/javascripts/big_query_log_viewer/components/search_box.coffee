@@ -5,12 +5,7 @@ window.BigQueryLogViewer ||= {}
 BigQueryLogViewer.SearchBox = React.createClass
   handleSearch: (e) -> 
     e.preventDefault()
-    @props.handleSearch
-      @refs.searchInput.getDOMNode().value,
-      @refs.startDate.getDOMNode().value,
-      @refs.endDate.getDOMNode().value,
-      @refs.userId.getDOMNode().value,
-      @refs.accountId.getDOMNode().value
+    @props.handleSearch( @refs.searchInput.getDOMNode().value, @refs.startDate.getDOMNode().value, @refs.endDate.getDOMNode().value, @refs.userId.getDOMNode().value, @refs.accountId.getDOMNode().value)
 
   render: ->
     return (
