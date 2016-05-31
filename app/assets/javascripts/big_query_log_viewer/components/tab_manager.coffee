@@ -65,14 +65,14 @@ BigQueryLogViewer.TabManager = React.createClass
       conds.push
         field: "user_id"
         method: "equals"
-        type: "string"
+        type: "int64"
         value: userId
 
     if accountId isnt ""
       conds.push
         field: "account_id"
         method: "equals"
-        type: "string"
+        type: "int64"
         value: accountId
     
     query = @query.buildQuery(startDate, endDate, conds, 'ts desc')

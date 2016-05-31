@@ -274,7 +274,7 @@ BigQueryLogViewer.Tab = React.createClass
             <th>Timestamp</th>
             <th>Host</th>
             <th>PID</th>
-            <th>Severity</th>
+            <th></th>
             <th>Message</th>
           </tr>
         </thead>
@@ -282,8 +282,7 @@ BigQueryLogViewer.Tab = React.createClass
         <thead>
           <tr>
             <th>Timestamp</th>
-            <th>RID</th>
-            <th>Severity</th>
+            <th></th>
             <th>Message</th>
           </tr>
         </thead>

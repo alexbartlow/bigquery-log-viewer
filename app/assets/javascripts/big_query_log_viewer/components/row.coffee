@@ -2,6 +2,25 @@
 
 window.BigQueryLogViewer ||= {}
 
+SeverityCell = React.createClass
+  getInitialState: ->
+    {
+      severity: @props.severity
+    }
+
+  severityClassMap: ->
+    {
+      "DEBUG": "label",
+      "INFO": "label label-info",
+      "WARNING": "label label-warning",
+      "ERROR": "label label-important"
+    }
+
+  render: ->
+    <td className='column-severity' data-severity={@props.severity}>
+      <span className={@severityClassMap()[@props.severity]}>{@props.severity[0]}</span>
+    </td>
+
 BigQueryLogViewer.Row = React.createClass
   getInitialState: ->
     s = "000#{@props.row.timestamp.getMilliseconds()}"
@@ -29,7 +48,7 @@ BigQueryLogViewer.Row = React.createClass
 
     collapsedMsg = 
       if row.msg.length > 200
-        <span>{row.msg.substring(0,200)}...<a href='#' className='expand-row' onClick={@handleShowMore}>expand</a><span className='collapsed-string'>{row.msg.substring(200)}</span></span>
+        <span>{row.msg.substring(0,200)}<a href='#' className='expand-row' onClick={@handleShowMore}>... expand</a><span className='collapsed-string'>{row.msg.substring(200)}</span></span>
       else
         row.msg
 
@@ -40,7 +59,7 @@ BigQueryLogViewer.Row = React.createClass
           <td className='column-ts'>{@state.tss}<span className='ts-milliseconds'>.{@state.tsm}</span></td>
           <td className='column-host'>{row.host}</td>
           <td className='column-pid'>{row.pid}</td>
-          <td className='column-severity' data-severity={row.severity}>{row.severity}</td>
+          <BigQueryLogViewer.SeverityCell severity={row.severity}/>
           <td className='column-msg'><pre>{collapsedMsg}</pre></td>
         </tr>
       )
@@ -48,8 +67,7 @@ BigQueryLogViewer.Row = React.createClass
       return (
         <tr className={'highlight-row' if @props.highlighted}>
           <td className='column-ts'>{@state.tss}<span className='ts-milliseconds'>.{@state.tsm}</span></td>
-          <td className='column-rid'>{row.rid}</td>
-          <td className='column-severity' data-severity={row.severity}>{row.severity}</td>
+          <SeverityCell severity={row.severity}/>
           <td className='column-msg'><pre>{collapsedMsg}</pre></td>
         </tr>
       )
