@@ -59,7 +59,7 @@ BigQueryLogViewer.Row = React.createClass
           <td className='column-ts'>{@state.tss}<span className='ts-milliseconds'>.{@state.tsm}</span></td>
           <td className='column-host'>{row.host}</td>
           <td className='column-pid'>{row.pid}</td>
-          <BigQueryLogViewer.SeverityCell severity={row.severity}/>
+          <SeverityCell severity={row.severity}/>
           <td className='column-msg'><pre>{collapsedMsg}</pre></td>
         </tr>
       )
