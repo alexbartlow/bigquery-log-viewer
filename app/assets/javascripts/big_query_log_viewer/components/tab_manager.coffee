@@ -37,7 +37,7 @@ BigQueryLogViewer.TabManager = React.createClass
   findExpansionTab: (rid) ->
     (index for tab, index in @state.tabs when tab.type == 'expansion' && tab.source == @activeTab() && tab.rid is rid)[0]
 
-  handleSearch: (searchTerm, startDate, endDate) ->
+  handleSearch: (searchTerm, startDate, endDate, userId, accountId) ->
     return if searchTerm == ''
     startDate = null if startDate == ''
     endDate = null if endDate == ''
@@ -53,15 +53,28 @@ BigQueryLogViewer.TabManager = React.createClass
       return
 
     @setState(queryInProgress: true)
-    
-    # Construct query.
-    conds = [
+
+    conds = $.map searchTerm.split(/\s+AND\s+/), (term) ->
       {
-        field: 'msg'
-        method: 'contains'
-        value: searchTerm
+        field: "msg",
+        method: "contains",
+        value: term
       }
-    ]
+
+    if userId isnt ""
+      conds.push
+        field: "user_id"
+        method: "equals"
+        type: "string"
+        value: userId
+
+    if accountId isnt ""
+      conds.push
+        field: "account_id"
+        method: "equals"
+        type: "string"
+        value: accountId
+    
     query = @query.buildQuery(startDate, endDate, conds, 'ts desc')
 
     @query.executeQuery(query, {}, (response) =>
