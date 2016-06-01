@@ -37,8 +37,8 @@ BigQueryLogViewer.TabManager = React.createClass
   findExpansionTab: (rid) ->
     (index for tab, index in @state.tabs when tab.type == 'expansion' && tab.source == @activeTab() && tab.rid is rid)[0]
 
-  handleSearch: (searchTerm, startDate, endDate, userId, accountId) ->
-    return if searchTerm == ''
+  handleSearch: (searchTerms, startDate, endDate, userId, accountId) ->
+    return if searchTerms is []
     startDate = null if startDate == ''
     endDate = null if endDate == ''
 
@@ -46,6 +46,8 @@ BigQueryLogViewer.TabManager = React.createClass
     if (startDate == null) && (endDate != null) || (startDate != null) && (endDate == null)
       alert 'Must fill in both or neither of start and end dates'
       return
+
+    searchTerm = searchTerms.map((term) -> "'#{term}'").join(" AND ")
     
     # Check to see if we've already searched this term.
     if (foundTab = @findResultsTab(searchTerm, startDate, endDate)) != undefined
@@ -54,7 +56,7 @@ BigQueryLogViewer.TabManager = React.createClass
 
     @setState(queryInProgress: true)
 
-    conds = $.map searchTerm.split(/\s+AND\s+/), (term) ->
+    conds = $.map searchTerms, (term) ->
       {
         field: "msg",
         method: "contains",
@@ -205,7 +207,7 @@ BigQueryLogViewer.TabManager = React.createClass
     pagination =
       for tab, index in @state.tabs
         title = tab.term
-        title = "<i class='icon icon-external-link'></i> #{title}" if tab.type == 'expansion'
+        title = "<i class='fa fa-external-link'></i> #{title}" if tab.type == 'expansion'
 
         {
           title: title

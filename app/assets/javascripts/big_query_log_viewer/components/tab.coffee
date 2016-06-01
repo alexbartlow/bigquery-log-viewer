@@ -28,6 +28,7 @@ BigQueryLogViewer.Tab = React.createClass
       currentPrevPage: 0
       storedNextRows: []
       storedPrevRows: []
+      tabIsLoadingMore: false
     }
 
   resultsTab: ->
@@ -154,6 +155,7 @@ BigQueryLogViewer.Tab = React.createClass
         @setState(pages: pages)
 
       else
+        @setState(tabIsLoadingMore: true)
         # Load additional context.
         startRow = @props.tab.row.rid - @props.rowsPerPage / 2 - 1 - @state.currentPrevPage * 1000
         endRow = @props.tab.row.rid - @props.rowsPerPage / 2 - 1 - (@state.currentPrevPage + 1) * 1000
@@ -184,10 +186,10 @@ BigQueryLogViewer.Tab = React.createClass
         @props.query.executeQuery(query, {maxResults: 1000}, (response) =>
           # Mark no more prev if there were no results.
           if parseInt(response.totalRows) == 0
-            @setState(showPrevLink: false)
+            @setState(showPrevLink: false, tabIsLoadingMore: false)
             return
           if parseInt(response.totalRows) < @props.rowsPerPage
-            @setState(showPrevLink: false)
+            @setState(showPrevLink: false, tabIsLoadingMore: false)
 
           # Create new page for the expansion.
           rows =
@@ -208,7 +210,7 @@ BigQueryLogViewer.Tab = React.createClass
             @state.pages[0] = rows.concat(@state.pages[0])
 
           @state.pages[0] = rows.concat(@state.pages[0])
-          @setState(currentPrevPage: @state.currentPrevPage + 1)
+          @setState(currentPrevPage: @state.currentPrevPage + 1, tabIsLoadingMore: false)
 
         , (reponse) =>
           console.log "ERROR: #{response.message}; entire response follows"
@@ -293,11 +295,20 @@ BigQueryLogViewer.Tab = React.createClass
 
     showMoreTop =
       if @expansionTab() && @state.showPrevLink
-        <a href={'#'} onClick={@handlePrevPage}>More</a>
+        <a href={'#'} onClick={@handlePrevPage}>
+          { if @state.tabIsLoadingMore
+            <i className="fa fa-spinner fa-spin"/>
+          }
+          More
+        </a>
 
     showMoreBottom =
       if @expansionTab() && @state.showNextLink
-        <a href={'#'} onClick={@handleNextPage}>More</a>
+        <a href={'#'} onClick={@handleNextPage}>
+          { if @state.tabIsLoadingMore
+            <i className="fa fa-spinner fa-spin"/>
+          }
+        More</a>
 
     return (
       <div className={'hidden' unless @props.visible}>

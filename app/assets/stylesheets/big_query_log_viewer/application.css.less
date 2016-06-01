@@ -29,8 +29,30 @@ a {
 }
 
 .controls {
+
+  .searchInput {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: flex;
+
+    span.term {
+      border: 1px solid #0046cd;
+      border-radius: 4px;
+      background-color: lighten(#0046cd, 50%);
+      padding: 2px 4px 0 4px;
+      margin: 2px;
+    }
+
+    input {
+      height: 100%;
+      border: 0;
+      flex-grow: 1;
+    }
+    input:focus {
+      outline: 0;
+    }
+  }
   input {
-    margin-right: 5px;
     padding: 3px;
     border-radius: 3px;
 
@@ -52,15 +74,15 @@ ul.nav {
       display: inline-block;
       width: 15px;
 
-      i.icon-remove {
+      i.fa.fa-remove {
         margin-left: 5px;
         cursor: pointer;
-        display: none;
+        color: #999;
       }
     }
 
-    &:hover span.remove-wrapper i.icon-remove {
-      display: inline-block;
+    &:hover span.remove-wrapper i.fa.fa-remove {
+      color: #666;
     }
   }
 }
@@ -91,19 +113,20 @@ ul.nav {
 
   .column-controls {
     i {
-      opacity: 0;
+      color: #999;
     }
   }
   tr:hover {
     .column-controls {
       i {
-        opacity: 1;
+        color: #666;
       }
       cursor: pointer;
     }
   }
   .column-ts {
-    white-space: nowrap;
+    // white-space: nowrap;
+    line-height: 2;
     .ts-milliseconds {
       color: #777;
     }
