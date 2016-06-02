@@ -5,7 +5,7 @@ window.BigQueryLogViewer ||= {}
 BigQueryLogViewer.SearchStatus = React.createClass
   render: ->
     if @props.queryInProgress
-      progress = <span>Query running...</span>
+      progress = <span id="runningQuery">Query running...</span>
     else if @props.errorMessage
       progress = <span className='error'>{@props.errorMessage}</span>      
     else if !@props.queryInProgress and @props.numReturnedResults?

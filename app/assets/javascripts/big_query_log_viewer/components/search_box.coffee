@@ -14,11 +14,14 @@ BigQueryLogViewer.SearchBox = React.createClass
     search_terms = @state.terms.slice(0)
     if value isnt ""
       search_terms.push(value)
+      @refs.searchInput.getDOMNode().value = ""
       @setState(terms: search_terms)
 
     @props.handleSearch( search_terms, @refs.startDate.getDOMNode().value, @refs.endDate.getDOMNode().value, @refs.userId.getDOMNode().value, @refs.accountId.getDOMNode().value)
 
   handleKeyDown: (event) ->
+    if event.keyCode == 8
+      console.log "backspace from keydown"
     if event.keyCode == 13 && event.shiftKey
       console.log "shift enter"
       event.stopPropagation()
@@ -30,7 +33,7 @@ BigQueryLogViewer.SearchBox = React.createClass
       event.target.value = ""
 
   handleKeyUp: (event) ->
-    if event.keyCode == 8 && event.target.selectionStart == 0
+    if event.keyCode == 8 && event.target.selectionStart == 0 && event.shiftKey
       terms = @state.terms.slice(0)
       terms.pop()
       @setState(terms: terms)
@@ -66,7 +69,7 @@ BigQueryLogViewer.SearchBox = React.createClass
                 {term}
               </span>
             }
-            <input ref='searchInput' placeholder={'Term. Shift enter adds new term.'} />
+            <input ref='searchInput' tabIndex='1' placeholder={'Term. Shift enter adds new term. Shift-Backspace or click to remove term.'} />
           </div>
           <input ref='startDate' type='date' defaultValue={startDate.toISOString().slice(0,10)} />
           &mdash;

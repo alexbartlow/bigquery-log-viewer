@@ -1,5 +1,7 @@
 window.BigQueryLogViewer ||= {}
 
+timeoutMS = 1000
+
 class BigQueryLogViewer.Query
   constructor: (@projectId, @tablePrefix) ->
     #
@@ -29,33 +31,49 @@ class BigQueryLogViewer.Query
     q = "#{q} ORDER BY #{order}" if order
     q
 
+  pollJobUntilFinished: (jobReference, config, success, error) ->
+    request = gapi.client.bigquery.jobs.getQueryResults
+      projectId: jobReference.projectId,
+      jobId: jobReference.jobId,
+      maxResults: config.maxResults
+      timeoutMs: config.timeoutMS
+
+    @handleResponseAndPollIfNecessary(request, config, success, error)
+
+  handleResponseAndPollIfNecessary: (request, config, success, error) ->
+    request.execute (response) =>
+      if response.error
+        return error(response) if error?
+      if response.jobComplete
+        # Query finished correctly, we are ready to go
+        success(response) if success?
+      else
+        config.jobReference ||= response.jobReference
+        document.getElementById("runningQuery").textContent = "Query Running... (#{(Date.now() - config.startDate) / 1000.0 }sec elapsed)"
+        # poll until BQ is done thinking
+        fx = => @pollJobUntilFinished(config.jobReference, config, success, error)
+        setTimeout(fx, config.timeoutMS)
+
   executeQuery: (query, config, success, error) ->
     console.log("Executing query: #{query}")
     config.maxResults ||= 1000
+    config.startDate = Date.now()
+    config.timeoutMS ||= timeoutMS
     request = gapi.client.bigquery.jobs.query
       projectId: @projectId
-      timeoutMs: 30000
+      timeoutMs: config.timeoutMS
       maxResults: config.maxResults
       query: query
-
-    request.execute (response) ->
-      if response.error
-        error(response) if error?
-      else
-        success(response) if success?
+    @handleResponseAndPollIfNecessary(request, config, success, error)
 
   executeListQuery: (config, success, error) ->
     console.log('Executing list query')
     config.maxResults ||= 1000
+    config.startDate = Date.now()
     request = gapi.client.bigquery.jobs.getQueryResults
       projectId: @projectId
       jobId: config.jobId
-      timeoutMs: 30000
+      timeoutMs: timeoutMS
       maxResults: config.maxResults
       pageToken: config.pageToken
-
-    request.execute (response) ->
-      if response.error
-        error(response) if error?
-      else
-        success(response) if success?
+    @handleResponseAndPollIfNecessary(request, config, success, error)
