@@ -49,7 +49,8 @@ class BigQueryLogViewer.Query
         success(response) if success?
       else
         config.jobReference ||= response.jobReference
-        document.getElementById("runningQuery").textContent = "Query Running... (#{(Date.now() - config.startDate) / 1000.0 }sec elapsed)"
+        if status = document.getElementById("runningQuery")
+          status.textContent = "Query Running... (#{(Date.now() - config.startDate) / 1000.0 }sec elapsed)"
         # poll until BQ is done thinking
         fx = => @pollJobUntilFinished(config.jobReference, config, success, error)
         setTimeout(fx, config.timeoutMS)
