@@ -71,8 +71,8 @@ BigQueryLogViewer.SearchBox = React.createClass
           <input ref='startDate' type='date' defaultValue={startDate.toISOString().slice(0,10)} />
           &mdash;
           <input ref='endDate' type='date' defaultValue={endDate.toISOString().slice(0,10)} />
-          <input ref="userId", placeholder={'UserID'}/>
-          <input ref="accountId", placeholder={"AccountID"}/>
+          <input className="padded" ref="userId", placeholder={'UserID'}/>
+          <input className="padded" ref="accountId", placeholder={"AccountID"}/>
           <input type='submit' value='Search' className='btn btn-primary' />
         </div>
       </form>

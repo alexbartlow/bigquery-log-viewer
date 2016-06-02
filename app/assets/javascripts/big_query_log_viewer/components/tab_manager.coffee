@@ -64,6 +64,7 @@ BigQueryLogViewer.TabManager = React.createClass
       }
 
     if userId isnt ""
+      searchTerm = "#{searchTerm} user_id:#{userId}"
       conds.push
         field: "user_id"
         method: "equals"
@@ -71,6 +72,7 @@ BigQueryLogViewer.TabManager = React.createClass
         value: userId
 
     if accountId isnt ""
+      searchTerm = "#{searchTerm} account_id:#{account_id}"
       conds.push
         field: "account_id"
         method: "equals"
