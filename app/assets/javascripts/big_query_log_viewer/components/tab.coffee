@@ -47,7 +47,7 @@ BigQueryLogViewer.Tab = React.createClass
     if @resultsTab() then 'Next' else 'More'
 
   handleNextPage: ->
-    if @state.activePageIndex + 1 < @state.pages.length
+    if (@state.activePageIndex + 1) < @state.pages.length
       # Page has already been loaded, just activate it
       @setState(activePageIndex: @state.activePageIndex + 1)
     else if @resultsTab()
@@ -67,7 +67,8 @@ BigQueryLogViewer.Tab = React.createClass
           @state.pages.push(rows.splice(0, @props.rowsPerPage))
         @state.pages.push rows unless rows.length is 0
         @setState(
-          pageToken: response.pageToken
+          pageToken: response.pageToken,
+          tabIsLoadingMore: false,
           activePageIndex: @state.activePageIndex + 1
         )
 
@@ -83,6 +84,7 @@ BigQueryLogViewer.Tab = React.createClass
         pages[0] = pages[0].concat(@state.storedNextRows.splice(0, @props.rowsPerPage))
         @setState(pages: pages)
       else
+        @setState(tabIsLoadingMore: true)
         # Load additional context.
         startRow = @props.tab.row.rid + @props.rowsPerPage / 2 + 1 + @state.currentNextPage * 1000
         endRow = @props.tab.row.rid + @props.rowsPerPage / 2 + 1 + (@state.currentNextPage + 1) * 1000
@@ -136,7 +138,7 @@ BigQueryLogViewer.Tab = React.createClass
           else
             @state.pages[0] = @state.pages[0].concat(rows)
 
-          @setState(currentNextPage: @state.currentNextPage + 1)
+          @setState(currentNextPage: @state.currentNextPage + 1, tabIsLoadingMore: false)
 
         , (reponse) =>
           console.log "ERROR: #{response.message}; entire response follows"
@@ -295,7 +297,7 @@ BigQueryLogViewer.Tab = React.createClass
 
     showMoreTop =
       if @expansionTab() && @state.showPrevLink
-        <a href={'#'} onClick={@handlePrevPage}>
+        <a key="morelinktop" className="morelink" href={'#'} onClick={@handlePrevPage}>
           { if @state.tabIsLoadingMore
             <i className="fa fa-spinner fa-spin"/>
           }
@@ -304,11 +306,12 @@ BigQueryLogViewer.Tab = React.createClass
 
     showMoreBottom =
       if @expansionTab() && @state.showNextLink
-        <a href={'#'} onClick={@handleNextPage}>
+        <a key="morelinkbottom" className="morelink" href={'#'} onClick={@handleNextPage}>
           { if @state.tabIsLoadingMore
             <i className="fa fa-spinner fa-spin"/>
           }
-        More</a>
+          More
+        </a>
 
     return (
       <div className={'hidden' unless @props.visible}>

@@ -53,12 +53,13 @@ BigQueryLogViewer.SearchBox = React.createClass
   onRemoveTerm: (term) ->
     terms = @state.terms.slice(0)
     terms.splice(terms.indexOf(term), 1)
+    @refs.searchInput.getDOMNode().value = term
+    @refs.searchInput.getDOMNode().focus()
     @setState(terms: terms)
 
   render: ->
     endDate = new Date()
     startDate = new Date()
-    startDate.setDate(endDate.getDate() - 1)
 
     return (
       <form className='navbar-form search-box form-inline' onSubmit={@handleSearch}>
